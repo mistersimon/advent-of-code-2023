@@ -28,8 +28,9 @@ fn main() {
         "1a" => day_1::day_1a(input),
         "1b" => day_1::day_1b(input),
         "2a" => day_2::day_2a(input),
+        "2b" => day_2::day_2b(input),
         _ => {
-            println!("Day {} not implemented", day);
+            println!("Day {} {} not implemented", day, part);
             0
         }
     };
