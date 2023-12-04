@@ -1,4 +1,5 @@
 mod day_1;
+mod day_2;
 
 use std::env::args;
 use std::{
@@ -26,6 +27,7 @@ fn main() {
     let result = match format!("{}{}", day, part).as_str() {
         "1a" => day_1::day_1a(input),
         "1b" => day_1::day_1b(input),
+        "2a" => day_2::day_2a(input),
         _ => {
             println!("Day {} not implemented", day);
             0
