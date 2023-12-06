@@ -3,6 +3,7 @@ mod day_2;
 mod day_3;
 mod day_4;
 mod day_5;
+mod day_6;
 
 use std::env::args;
 use std::{
@@ -38,6 +39,8 @@ fn main() {
         "4b" => day_4::day_4b(input),
         "5a" => day_5::day_5a(input).try_into().unwrap(),
         "5b" => day_5::day_5b(input).try_into().unwrap(),
+        "6a" => day_6::day_6a(input).try_into().unwrap(),
+        "6b" => day_6::day_6b(input).try_into().unwrap(),
         _ => {
             println!("Day {} {} not implemented", day, part);
             0
