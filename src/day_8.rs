@@ -19,8 +19,7 @@ fn lcm(xs: Vec<u64>) -> u64 {
     xs.iter().fold(1, |ans, x| (x * ans) / gcd(*x, ans))
 }
 
-
-pub fn part_one(mut lines: impl Iterator<Item=String>) -> u64 {
+pub fn part_one(mut lines: impl Iterator<Item = String>) -> u64 {
     let re = Regex::new(r"[A-Z]{3}").unwrap();
 
     // let binding = lines.next().unwrap();
@@ -65,7 +64,7 @@ pub fn part_one(mut lines: impl Iterator<Item=String>) -> u64 {
     steps.try_into().unwrap()
 }
 
-pub fn part_two(mut lines: impl Iterator<Item=String>) -> u64 {
+pub fn part_two(mut lines: impl Iterator<Item = String>) -> u64 {
     let re = Regex::new(r"[A-Z0-9]{3}").unwrap();
 
     // let binding = lines.next().unwrap();

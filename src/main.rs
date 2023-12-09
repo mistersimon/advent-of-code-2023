@@ -6,6 +6,7 @@ mod day_5;
 mod day_6;
 mod day_7;
 mod day_8;
+mod day_9;
 
 use std::env::args;
 use std::{
@@ -14,7 +15,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-fn get_input(day: u8) -> impl Iterator<Item=String> {
+fn get_input(day: u8) -> impl Iterator<Item = String> {
     let root = env::var("CARGO_MANIFEST_DIR").unwrap();
     let dir = format!("{}/inputs/{}.txt", root, day);
     let file = File::open(dir).expect("File not found");
@@ -47,6 +48,8 @@ fn main() {
         "7b" => day_7::day_7b(input),
         "8a" => day_8::part_one(input),
         "8b" => day_8::part_two(input),
+        "9a" => day_9::part_one(input),
+        "9b" => day_9::part_two(input),
         _ => {
             println!("Day {} {} not implemented", day, part);
             0
