@@ -48,7 +48,6 @@ fn walk(
 }
 
 fn get_start(map: &Vec<Vec<char>>) -> (Coordinate, Move, char) {
-    let mut mov = (0i64, 0i64);
     let mut start: (usize, usize) = (0, 0);
 
     // Find start by scanning
@@ -64,7 +63,7 @@ fn get_start(map: &Vec<Vec<char>>) -> (Coordinate, Move, char) {
     let tos = [NORTH, SOUTH, EAST, WEST]
         .iter()
         .map(|m| {
-            let (_, mov) = walk(&map, start, *m);
+            let (_, mov) = walk(map, start, *m);
             match mov {
                 (0, 0) => (0i64, 0i64),
                 _ => *m,
@@ -83,7 +82,7 @@ fn get_start(map: &Vec<Vec<char>>) -> (Coordinate, Move, char) {
         _ => 'S',
     };
 
-    return (start, tos[0], piece);
+    (start, tos[0], piece)
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
@@ -161,15 +160,13 @@ pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
                         _ => *c,
                     }
                 )
+            } else if is_inside {
+                print!("I");
             } else {
-                if is_inside {
-                    print!("I");
-                } else {
-                    print!("0");
-                }
+                print!("0");
             }
         }
-        print!("\n");
+        println!();
     }
 
     area
@@ -178,7 +175,6 @@ pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
 #[cfg(test)]
 mod tests {
     use indoc::indoc;
-    use rstest::rstest;
 
     const CASE_ONE: &str = indoc! {"
         ..F7.
