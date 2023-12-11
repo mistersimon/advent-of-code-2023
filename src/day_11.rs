@@ -1,6 +1,6 @@
 use std::vec;
 
-fn main(lines: impl Iterator<Item = String>, mul: usize) -> u64 {
+fn main(lines: impl Iterator<Item = String>, expansion_factor: usize) -> u64 {
     let map: Vec<Vec<char>> = lines
         .map(|m| m.chars().collect::<Vec<char>>())
         .collect::<Vec<Vec<char>>>();
@@ -47,7 +47,10 @@ fn main(lines: impl Iterator<Item = String>, mul: usize) -> u64 {
                 .position(|n| y < n)
                 .unwrap_or(empty_cols.len());
 
-            (*y + dy * mul, *x + dx * mul)
+            (
+                *y + dy * (expansion_factor - 1usize),
+                *x + dx * (expansion_factor - 1usize),
+            )
         })
         .collect();
 
@@ -64,7 +67,7 @@ fn main(lines: impl Iterator<Item = String>, mul: usize) -> u64 {
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
-    main(lines, 1)
+    main(lines, 2)
 }
 
 pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
