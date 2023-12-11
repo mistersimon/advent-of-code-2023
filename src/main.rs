@@ -1,4 +1,5 @@
 mod day_1;
+mod day_10;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -50,6 +51,8 @@ fn main() {
         "8b" => day_8::part_two(input),
         "9a" => day_9::part_one(input),
         "9b" => day_9::part_two(input),
+        "10a" => day_10::part_one(input),
+        "10b" => day_10::part_two(input),
         _ => {
             println!("Day {} {} not implemented", day, part);
             0
