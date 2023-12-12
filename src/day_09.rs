@@ -21,7 +21,7 @@ fn extrapolate_backward(x: &Vec<i64>) -> i64 {
         return 0;
     }
 
-    x.first().unwrap() - crate::day_9::extrapolate_backward(&delta(x))
+    x.first().unwrap() - crate::day_09::extrapolate_backward(&delta(x))
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {

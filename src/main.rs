@@ -1,4 +1,12 @@
-mod day_1;
+mod day_01;
+mod day_02;
+mod day_03;
+mod day_04;
+mod day_05;
+mod day_06;
+mod day_07;
+mod day_08;
+mod day_09;
 mod day_10;
 mod day_11;
 mod day_2;
@@ -34,24 +42,24 @@ fn main() {
     let input = get_input(day);
 
     let result: u64 = match format!("{}{}", day, part).as_str() {
-        "1a" => day_1::day_1a(input).try_into().unwrap(),
-        "1b" => day_1::day_1b(input).try_into().unwrap(),
-        "2a" => day_2::day_2a(input).try_into().unwrap(),
-        "2b" => day_2::day_2b(input).try_into().unwrap(),
-        "3a" => day_3::day_3a(input).try_into().unwrap(),
-        "3b" => day_3::day_3b(input).try_into().unwrap(),
-        "4a" => day_4::day_4a(input).try_into().unwrap(),
-        "4b" => day_4::day_4b(input).try_into().unwrap(),
-        "5a" => day_5::day_5a(input),
-        "5b" => day_5::day_5b(input),
-        "6a" => day_6::day_6a(input),
-        "6b" => day_6::day_6b(input),
-        "7a" => day_7::day_7a(input),
-        "7b" => day_7::day_7b(input),
-        "8a" => day_8::part_one(input),
-        "8b" => day_8::part_two(input),
-        "9a" => day_9::part_one(input),
-        "9b" => day_9::part_two(input),
+        "1a" => day_01::day_1a(input).try_into().unwrap(),
+        "1b" => day_01::day_1b(input).try_into().unwrap(),
+        "2a" => day_02::day_2a(input).try_into().unwrap(),
+        "2b" => day_02::day_2b(input).try_into().unwrap(),
+        "3a" => day_03::day_3a(input).try_into().unwrap(),
+        "3b" => day_03::day_3b(input).try_into().unwrap(),
+        "4a" => day_04::day_4a(input).try_into().unwrap(),
+        "4b" => day_04::day_4b(input).try_into().unwrap(),
+        "5a" => day_05::day_5a(input),
+        "5b" => day_05::day_5b(input),
+        "6a" => day_06::day_6a(input),
+        "6b" => day_06::day_6b(input),
+        "7a" => day_07::day_7a(input),
+        "7b" => day_07::day_7b(input),
+        "8a" => day_08::part_one(input),
+        "8b" => day_08::part_two(input),
+        "9a" => day_09::part_one(input),
+        "9b" => day_09::part_two(input),
         "10a" => day_10::part_one(input),
         "10b" => day_10::part_two(input),
         "11a" => day_11::part_one(input),
