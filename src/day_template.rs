@@ -1,8 +1,8 @@
-pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
+pub fn part_one(_lines: impl Iterator<Item = String>) -> u64 {
     todo!();
 }
 
-pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
+pub fn part_two(_lines: impl Iterator<Item = String>) -> u64 {
     todo!();
 }
 
