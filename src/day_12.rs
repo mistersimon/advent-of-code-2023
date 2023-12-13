@@ -1,69 +1,83 @@
-fn permutations(processed: &str, remaining: &str, groups: &[usize], within: bool) -> u64 {
-    if remaining.is_empty() {
-        return if groups.is_empty() || (groups.len() == 1 && groups[0] == 0) {
-            // println!("{}{} => {:?} ->  Valid", processed, remaining, groups);
-            1
-        } else {
-            0
+use std::collections::HashMap;
+
+#[allow(clippy::type_complexity)]
+
+fn solve<'a>(
+    s: &'a [char],
+    in_group: Option<usize>,
+    groups: &'a [usize],
+    cache: &mut HashMap<(&'a [char], Option<usize>, &'a [usize]), u64>,
+) -> u64 {
+    if s.is_empty() {
+        return match in_group {
+            Some(n) if groups == [n] => 1,
+            None if groups.is_empty() => 1,
+            _ => 0,
         };
     }
 
-    let first = remaining.chars().next().unwrap();
-
-    // Try ? as both '.' or '#' without moving forward
-    if first == '?' {
-        return permutations(processed, &format!(".{}", &remaining[1..]), groups, within)
-            + permutations(processed, &format!("#{}", &remaining[1..]), groups, within);
+    if let Some(result) = cache.get(&(s, in_group, groups)) {
+        return *result;
     }
 
-    let remaining = remaining[1..].to_string();
-
-    if first == '.' {
-        let processed = format!("{}.", processed);
-
-        if within && groups[0] == 0 {
-            let groups = &groups[1..];
-            return permutations(&processed, &remaining, groups, false);
-        } else if !within {
-            // Skip
-            return permutations(&processed, &remaining, groups, within);
+    let result = match (s[0], in_group, groups) {
+        ('.', None, _) => solve(&s[1..], None, groups, cache),
+        ('.' | '?', Some(n), [e, ..]) if n == *e => solve(&s[1..], None, &groups[1..], cache),
+        ('#' | '?', Some(n), [e, ..]) if n < *e => solve(&s[1..], Some(n + 1), groups, cache),
+        ('#', None, [_, ..]) => solve(&s[1..], Some(1), groups, cache),
+        ('?', None, _) => {
+            solve(&s[1..], None, groups, cache) + solve(&s[1..], Some(1), groups, cache)
         }
-    }
+        _ => 0,
+    };
 
-    // Process #
-    if first == '#' && !groups.is_empty() && groups[0] > 0 {
-        let processed = format!("{}.", processed);
-        let mut groups = groups.to_vec();
-        groups[0] -= 1;
-        return permutations(&processed, &remaining, &groups, true);
-    }
-
-    0
-}
-
-fn arrange_row(s: String) -> u64 {
-    let m = s.split(' ').collect::<Vec<&str>>();
-
-    let [record, group] = m[..] else { panic!() };
-
-    let groups: Vec<usize> = group
-        .split(',')
-        .map(|m| m.to_string().parse::<usize>().unwrap())
-        .collect();
-
-    permutations("", record, &groups, false)
+    cache.insert((s, in_group, groups), result);
+    // println!("{}{} => {:?} ->  Invalid", processed, remaining, groups);
+    result
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
     let mut result = 0;
     for line in lines {
-        result += arrange_row(line.clone());
+        let m = line.split(' ').collect::<Vec<&str>>();
+
+        let [record, group] = m[..] else { panic!() };
+
+        let groups: Vec<usize> = group
+            .split(',')
+            .map(|m| m.to_string().parse::<usize>().unwrap())
+            .collect();
+
+        let records: Vec<char> = record.chars().collect();
+        result += solve(&records, None, &groups, &mut HashMap::new());
     }
+
     result
 }
 
-pub fn part_two(_lines: impl Iterator<Item = String>) -> u64 {
-    todo!();
+pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
+    let copies = 5;
+    let mut result = 0;
+    for line in lines {
+        let m = line.split(' ').collect::<Vec<&str>>();
+
+        let [record, group] = m[..] else { panic!() };
+
+        let record = format!("{}?", record).repeat(copies);
+        let record = record[..record.len() - 1].to_string();
+        let group = format!("{},", group).repeat(copies);
+
+        let groups: Vec<usize> = group
+            .split(',')
+            .filter_map(|m| m.to_string().parse::<usize>().ok())
+            .collect();
+
+        let records: Vec<char> = record.chars().collect();
+
+        result += solve(&records, None, &groups, &mut HashMap::new());
+    }
+
+    result
 }
 #[cfg(test)]
 mod tests {
@@ -89,8 +103,8 @@ mod tests {
     #[case("????.######..#####. 1,6,5", 4)]
     #[case("?###???????? 3,2,1", 10)]
     #[case("???.?????.?# 1,1,2,1", 13)]
-    fn test_arrange_row(#[case] input: String, #[case] expected: u64) {
-        let output = super::arrange_row(input);
+    fn test_part_one_row(#[case] input: String, #[case] expected: u64) {
+        let output = super::part_one(input.lines().map(|m| m.to_string()));
         assert_eq!(output, expected);
     }
     #[test]
@@ -99,11 +113,23 @@ mod tests {
         let result = super::part_one(lines);
         assert_eq!(result, 21);
     }
-    //
-    // #[test]
-    // fn test_part_two_case_1() {
-    //     let lines = CASE_1.lines().map(|line| line.to_string());
-    //     let result = super::part_two(lines);
-    //     assert_eq!(result, 0);
-    // }
+
+    #[rstest]
+    #[case("???.### 1,1,3", 1)]
+    #[case(".??..??...?##. 1,1,3", 16384)]
+    #[case("?#?#?#?#?#?#?#? 1,3,1,6", 1)]
+    #[case("????.#...#... 4,1,1", 16)]
+    #[case("????.######..#####. 1,6,5", 2500)]
+    #[case("?###???????? 3,2,1", 506250)]
+    fn test_part_two_row(#[case] input: String, #[case] expected: u64) {
+        let output = super::part_two(input.lines().map(|m| m.to_string()));
+        assert_eq!(output, expected);
+    }
+
+    #[test]
+    fn test_part_two_case_1() {
+        let lines = CASE_1.lines().map(|line| line.to_string());
+        let result = super::part_two(lines);
+        assert_eq!(result, 525152);
+    }
 }
