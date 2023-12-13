@@ -9,14 +9,7 @@ mod day_08;
 mod day_09;
 mod day_10;
 mod day_11;
-mod day_2;
-mod day_3;
-mod day_4;
-mod day_5;
-mod day_6;
-mod day_7;
-mod day_8;
-mod day_9;
+mod day_12;
 
 use std::env::args;
 use std::{
@@ -64,6 +57,8 @@ fn main() {
         "10b" => day_10::part_two(input),
         "11a" => day_11::part_one(input),
         "11b" => day_11::part_two(input),
+        "12a" => day_12::part_one(input),
+        "12b" => day_12::part_two(input),
         _ => {
             println!("Day {} {} not implemented", day, part);
             0
