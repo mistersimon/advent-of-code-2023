@@ -1,9 +1,4 @@
-use regex::Regex;
-use std::fmt::format;
-
-fn permutations(processed: String, mut remaining: String, groups: Vec<usize>, within: bool) -> u64 {
-    // println!("{}|{} -> {:?}", processed, remaining, groups);
-    // println!("{}^", " ".repeat(processed.len()));
+fn permutations(processed: &str, remaining: &str, groups: Vec<usize>, within: bool) -> u64 {
     if remaining.is_empty() {
         return if groups.is_empty() || (groups.len() == 1 && groups[0] == 0) {
             // println!("{}{} => {:?} ->  Valid", processed, remaining, groups);
@@ -13,59 +8,51 @@ fn permutations(processed: String, mut remaining: String, groups: Vec<usize>, wi
         };
     }
 
-    let first = remaining.chars().nth(0).unwrap();
+    let first = remaining.chars().next().unwrap();
 
+    // Try ? as both '.' or '#' without moving forward
     if first == '?' {
-        // Try as both '.' or '#' without moving forward
         return permutations(
-            processed.clone(),
-            format!(".{}", remaining[1..].to_string()),
+            processed,
+            &format!(".{}", &remaining[1..]),
             groups.clone(),
             within,
         ) + permutations(
-            processed.clone(),
-            format!("#{}", remaining[1..].to_string()),
+            processed,
+            &format!("#{}", &remaining[1..]),
             groups.clone(),
             within,
         );
     }
 
+    let r = remaining[1..].to_string();
     if first == '.' && within {
         if groups[0] == 0 {
             let mut g = groups.clone();
             g.remove(0);
-            return permutations(
-                format!("{}.", processed),
-                remaining[1..].to_string(),
-                g,
-                false,
-            );
+            return permutations(&format!("{}.", processed), &r, g, false);
         }
         return 0;
     }
+
+    // Skip
     if first == '.' {
-        // Skip
-        return permutations(
-            format!("{}.", processed),
-            remaining[1..].to_string(),
-            groups,
-            within,
-        );
+        if within && groups[0] == 0 {
+            let mut g = groups.clone();
+            g.remove(0);
+            return permutations(&format!("{}.", processed), &r, g, within);
+        } else if !within {
+            return permutations(&format!("{}.", processed), &r, groups, within);
+        }
     }
 
     // Process #
-    if first == '#' && groups.len() > 0 && groups[0] > 0 {
+    if first == '#' && !groups.is_empty() && groups[0] > 0 {
         let mut g = groups.clone();
         g[0] -= 1;
-        return permutations(
-            format!("{}#", processed),
-            remaining[1..].to_string(),
-            g,
-            true,
-        );
+        return permutations(&format!("{}#", processed), &r, g, true);
     }
 
-    // println!("{}{} = {:?} ->  Invalid", processed, remaining, groups);
     0
 }
 
@@ -79,22 +66,18 @@ fn arrange_row(s: String) -> u64 {
         .map(|m| m.to_string().parse::<usize>().unwrap())
         .collect();
 
-    // println!("\n\n {} {}", record, group);
-    println!("{} => {:?}", record, groups);
-    permutations("".to_string(), record.to_string(), groups, false)
+    permutations("", record, groups, false)
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
     let mut result = 0;
     for line in lines {
-        println!("{}", line.clone());
-        let p = arrange_row(line.clone());
-        result += p
+        result += arrange_row(line.clone());
     }
     result
 }
 
-pub fn part_two(lines: impl Iterator<Item = String>) -> u64 {
+pub fn part_two(_lines: impl Iterator<Item = String>) -> u64 {
     todo!();
 }
 #[cfg(test)]
