@@ -1,4 +1,4 @@
-fn permutations(processed: &str, remaining: &str, groups: Vec<usize>, within: bool) -> u64 {
+fn permutations(processed: &str, remaining: &str, groups: &[usize], within: bool) -> u64 {
     if remaining.is_empty() {
         return if groups.is_empty() || (groups.len() == 1 && groups[0] == 0) {
             // println!("{}{} => {:?} ->  Valid", processed, remaining, groups);
@@ -12,52 +12,37 @@ fn permutations(processed: &str, remaining: &str, groups: Vec<usize>, within: bo
 
     // Try ? as both '.' or '#' without moving forward
     if first == '?' {
-        return permutations(
-            processed,
-            &format!(".{}", &remaining[1..]),
-            groups.clone(),
-            within,
-        ) + permutations(
-            processed,
-            &format!("#{}", &remaining[1..]),
-            groups.clone(),
-            within,
-        );
+        return permutations(processed, &format!(".{}", &remaining[1..]), groups, within)
+            + permutations(processed, &format!("#{}", &remaining[1..]), groups, within);
     }
 
-    let r = remaining[1..].to_string();
-    if first == '.' && within {
-        if groups[0] == 0 {
-            let mut g = groups.clone();
-            g.remove(0);
-            return permutations(&format!("{}.", processed), &r, g, false);
-        }
-        return 0;
-    }
+    let remaining = remaining[1..].to_string();
 
-    // Skip
     if first == '.' {
+        let processed = format!("{}.", processed);
+
         if within && groups[0] == 0 {
-            let mut g = groups.clone();
-            g.remove(0);
-            return permutations(&format!("{}.", processed), &r, g, within);
+            let groups = &groups[1..];
+            return permutations(&processed, &remaining, groups, false);
         } else if !within {
-            return permutations(&format!("{}.", processed), &r, groups, within);
+            // Skip
+            return permutations(&processed, &remaining, groups, within);
         }
     }
 
     // Process #
     if first == '#' && !groups.is_empty() && groups[0] > 0 {
-        let mut g = groups.clone();
-        g[0] -= 1;
-        return permutations(&format!("{}#", processed), &r, g, true);
+        let processed = format!("{}.", processed);
+        let mut groups = groups.to_vec();
+        groups[0] -= 1;
+        return permutations(&processed, &remaining, &groups, true);
     }
 
     0
 }
 
 fn arrange_row(s: String) -> u64 {
-    let m = s.split(" ").collect::<Vec<&str>>();
+    let m = s.split(' ').collect::<Vec<&str>>();
 
     let [record, group] = m[..] else { panic!() };
 
@@ -66,7 +51,7 @@ fn arrange_row(s: String) -> u64 {
         .map(|m| m.to_string().parse::<usize>().unwrap())
         .collect();
 
-    permutations("", record, groups, false)
+    permutations("", record, &groups, false)
 }
 
 pub fn part_one(lines: impl Iterator<Item = String>) -> u64 {
