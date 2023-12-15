@@ -12,6 +12,7 @@ mod day_11;
 mod day_12;
 mod day_13;
 mod day_14;
+mod day_15;
 
 use std::env::args;
 use std::{
@@ -65,6 +66,28 @@ fn main() {
         "13b" => day_13::part_two(input),
         "14a" => day_14::part_one(input),
         "14b" => day_14::part_two(input),
+        "15a" => day_15::part_one(input),
+        "15b" => day_15::part_two(input),
+        // "16a" => day_16::part_one(input),
+        // "16b" => day_16::part_two(input),
+        // "17a" => day_17::part_one(input),
+        // "17b" => day_17::part_two(input),
+        // "18a" => day_18::part_one(input),
+        // "18b" => day_18::part_two(input),
+        // "19a" => day_19::part_one(input),
+        // "19b" => day_19::part_two(input),
+        // "20a" => day_20::part_one(input),
+        // "20b" => day_20::part_two(input),
+        // "21a" => day_21::part_one(input),
+        // "21b" => day_21::part_two(input),
+        // "22a" => day_22::part_one(input),
+        // "22b" => day_22::part_two(input),
+        // "23a" => day_23::part_one(input),
+        // "23b" => day_23::part_two(input),
+        // "24a" => day_24::part_one(input),
+        // "24b" => day_24::part_two(input),
+        // "25a" => day_25::part_one(input),
+        // "25b" => day_25::part_two(input),
         _ => {
             println!("Day {} {} not implemented", day, part);
             0
