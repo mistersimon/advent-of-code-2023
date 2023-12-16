@@ -16,7 +16,7 @@ pub fn part_one(mut lines: impl Iterator<Item = String>) -> u64 {
         .next()
         .unwrap()
         .split(',')
-        .map(|s| hash(s))
+        .map(hash)
         .sum::<usize>()
         .try_into()
         .unwrap()
