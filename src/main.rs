@@ -14,6 +14,7 @@ mod day_13;
 mod day_14;
 mod day_15;
 mod day_16;
+mod day_17;
 
 use std::env::args;
 use std::{
@@ -71,8 +72,8 @@ fn main() {
         "15b" => day_15::part_two(input),
         "16a" => day_16::part_one(input),
         "16b" => day_16::part_two(input),
-        // "17a" => day_17::part_one(input),
-        // "17b" => day_17::part_two(input),
+        "17a" => day_17::part_one(input),
+        "17b" => day_17::part_two(input),
         // "18a" => day_18::part_one(input),
         // "18b" => day_18::part_two(input),
         // "19a" => day_19::part_one(input),
