@@ -100,6 +100,12 @@ fn shortest_path(field: &Vec<Vec<usize>>, min_step: usize, max_step: usize) -> O
         direction: Direction::Right,
         steps_direction: 0,
     });
+    heap.push(State {
+        cost: 0,
+        position: start,
+        direction: Direction::Down,
+        steps_direction: 0,
+    });
 
     let mut shortest: Option<usize> = None;
     while let Some(State {
